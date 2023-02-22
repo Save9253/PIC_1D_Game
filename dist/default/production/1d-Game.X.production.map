@@ -68,18 +68,22 @@ Default Scalar Model: Small
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200                0xce           0x135  (309)
-.text                        0x2ce                0x66            0x99  (153)
-.init.delay32                0x334                0x1c            0x2a  (42)
+.text                        0x2ce               0x16e           0x225  (549)
+.init.delay32                0x43c                0x1c            0x2a  (42)
+.dinit                       0x458                0x16            0x21  (33)
 
-                 Total "program" memory used (bytes):          0x1f8  (504) <1%
+                 Total "program" memory used (bytes):          0x3a5  (933) 1%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x2000]
 
 section                    address      alignment gaps    total length  (dec)
 -------                    -------      --------------    -------------------
+.nbss                        0x800                   0             0x6  (6)
+.ndata                       0x806                   0             0x2  (2)
+.bss                         0x808                   0            0x40  (64)
 
-                 Total "data" memory used (bytes):              0  (0) 
+                 Total "data" memory used (bytes):           0x48  (72) <1%
 
 
 Dynamic Memory Usage
@@ -87,12 +91,30 @@ Dynamic Memory Usage
 region                     address                      maximum length  (dec)
 ------                     -------                      ---------------------
 heap                             0                                   0  (0)
-stack                        0x800                              0x2000  (8192)
+stack                        0x848                              0x1fb8  (8120)
 
-                 Maximum dynamic memory (bytes):         0x2000  (8192)
+                 Maximum dynamic memory (bytes):         0x1fb8  (8120)
 
 Info: Project is using a large data memory model when small data memory model is sufficient.
 
+
+External Symbols in Data Memory (by address):
+
+                    0x0800                  _timer1_count
+                    0x0802                  _timer2_count
+                    0x0804                  _playerPosition
+                    0x0806                  _playerPassThrough
+                    0x0807                  _doorPassThrough
+                    0x0808                  _mase
+
+External Symbols in Data Memory (by name):
+
+                    0x0807                  _doorPassThrough
+                    0x0808                  _mase
+                    0x0806                  _playerPassThrough
+                    0x0804                  _playerPosition
+                    0x0800                  _timer1_count
+                    0x0802                  _timer2_count
 
 External Symbols in Program Memory (by address):
 
@@ -101,18 +123,28 @@ External Symbols in Program Memory (by address):
                   0x000252                  __data_init
                   0x000252                  __data_init_standard
                   0x0002c8                  __DefaultInterrupt
-                  0x0002e2                  _main
-                  0x000334                  ___delay32
+                  0x0002ce                  _blink
+                  0x0002f6                  _updateDisplay
+                  0x00030e                  _movePlayerLeft
+                  0x000320                  _movePlayerRight
+                  0x000332                  _processInput
+                  0x0003a6                  _main
+                  0x00043c                  ___delay32
 
 External Symbols in Program Memory (by name):
 
                   0x0002c8                  __DefaultInterrupt
-                  0x000334                  ___delay32
+                  0x00043c                  ___delay32
                   0x000252                  __data_init
                   0x000252                  __data_init_standard
                   0x00023c                  __psv_init
                   0x000200                  __resetPRI
-                  0x0002e2                  _main
+                  0x0002ce                  _blink
+                  0x0003a6                  _main
+                  0x00030e                  _movePlayerLeft
+                  0x000320                  _movePlayerRight
+                  0x000332                  _processInput
+                  0x0002f6                  _updateDisplay
 
 Memory Configuration
 
@@ -236,26 +268,26 @@ __FUID3
 .comment
  *(.comment)
 
-.debug_info       0x000000        0x262
+.debug_info       0x000000        0x7d6
  *(.debug_info)
- .debug_info      0x000000        0x262 build/default/production/newmainXC16.o
+ .debug_info      0x000000        0x7d6 build/default/production/newmainXC16.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev     0x000000         0x99
+.debug_abbrev     0x000000        0x17a
  *(.debug_abbrev)
- .debug_abbrev    0x000000         0x99 build/default/production/newmainXC16.o
+ .debug_abbrev    0x000000        0x17a build/default/production/newmainXC16.o
 
-.debug_line       0x000000        0x124
+.debug_line       0x000000        0x14f
  *(.debug_line)
- .debug_line      0x000000        0x124 build/default/production/newmainXC16.o
+ .debug_line      0x000000        0x14f build/default/production/newmainXC16.o
 
-.debug_frame      0x000000         0x48
+.debug_frame      0x000000         0xb0
  *(.debug_frame)
- .debug_frame     0x000000         0x48 build/default/production/newmainXC16.o
+ .debug_frame     0x000000         0xb0 build/default/production/newmainXC16.o
 
-.debug_str        0x000000          0x9
+.debug_str        0x000000         0x71
  *(.debug_str)
- .debug_str       0x000000          0x9 build/default/production/newmainXC16.o
+ .debug_str       0x000000         0x71 build/default/production/newmainXC16.o
 
 .debug_loc
  *(.debug_loc)
@@ -264,10 +296,10 @@ __FUID3
  *(.debug_macinfo)
 
 .debug_pubnames
-                  0x000000         0x1b
+                  0x000000         0xd7
  *(.debug_pubnames)
  .debug_pubnames
-                  0x000000         0x1b build/default/production/newmainXC16.o
+                  0x000000         0xd7 build/default/production/newmainXC16.o
 
 .debug_ranges
  *(.debug_ranges)
@@ -1147,27 +1179,51 @@ LOAD c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-elf.a
 END GROUP
 OUTPUT(dist/default/production/1d-Game.X.production.elf elf32-pic30)
 LOAD default_isr
+LOAD data_init
 
 .debug_pubtypes
-                  0x000018         0x1f
+                  0x000018         0x7a
  .debug_pubtypes
-                  0x000018         0x1f build/default/production/newmainXC16.o
+                  0x000018         0x7a build/default/production/newmainXC16.o
 
 __c30_signature
-                  0x000037         0x18
+                  0x000092         0x18
  __c30_signature
-                  0x000037          0x6 build/default/production/newmainXC16.o
+                  0x000092          0x6 build/default/production/newmainXC16.o
  __c30_signature
-                  0x00003d          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o)
+                  0x000098          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o)
  __c30_signature
-                  0x000043          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(data_init_standard.o)
+                  0x00009e          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(data_init_standard.o)
  __c30_signature
-                  0x000049          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
+                  0x0000a4          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
 
-.text             0x0002ce         0x66
- .text            0x0002ce         0x66 build/default/production/newmainXC16.o
-                  0x0002e2                  _main
+.nbss               0x0800          0x6
+ .nbss              0x0800          0x6 build/default/production/newmainXC16.o
+                    0x0800                  _timer1_count
+                    0x0802                  _timer2_count
+                    0x0804                  _playerPosition
 
-.init.delay32     0x000334         0x1c
- .init.delay32    0x000334         0x1c c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
-                  0x000334                  ___delay32
+.ndata              0x0806          0x2
+ .ndata             0x0806          0x2 build/default/production/newmainXC16.o
+                    0x0806                  _playerPassThrough
+                    0x0807                  _doorPassThrough
+
+.bss                0x0808         0x40
+ .bss               0x0808         0x40 build/default/production/newmainXC16.o
+                    0x0808                  _mase
+
+.text             0x0002ce        0x16e
+ .text            0x0002ce        0x16e build/default/production/newmainXC16.o
+                  0x0002ce                  _blink
+                  0x0002f6                  _updateDisplay
+                  0x00030e                  _movePlayerLeft
+                  0x000320                  _movePlayerRight
+                  0x000332                  _processInput
+                  0x0003a6                  _main
+
+.init.delay32     0x00043c         0x1c
+ .init.delay32    0x00043c         0x1c c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
+                  0x00043c                  ___delay32
+
+.dinit            0x000458         0x16
+ .dinit           0x000458         0x16 data_init

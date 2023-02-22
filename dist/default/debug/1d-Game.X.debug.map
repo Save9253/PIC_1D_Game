@@ -4,11 +4,6 @@ Tool Name:
   c:\program files\microchip\xc16\v2.00\bin\bin\..\bin/elf-ld.exe
 
 Command:
-  -TC:\\Users\\savel\\AppData\\Local\\Temp\\tmp0000579c.00 \
-  -TC:\\Users\\savel\\AppData\\Local\\Temp\\tmp0000579c.01 \
-  -TC:\\Users\\savel\\AppData\\Local\\Temp\\tmp0000579c.02 \
-  -TC:\\Users\\savel\\AppData\\Local\\Temp\\tmp0000579c.03 \
-  -TC:\\Users\\savel\\AppData\\Local\\Temp\\tmp0000579c.04 \
   -p24HJ64GP502 \
   --mdfp=C:/Program Files/Microchip/MPLABX/v6.00/packs/Microchip/dsPIC33F-GP-MC_DFP/1.3.64/xc16 \
   -o \
@@ -28,7 +23,8 @@ Command:
   --defsym=__MPLAB_BUILD=1 \
   --defsym=__MPLAB_DEBUG=1 \
   --defsym=__DEBUG=1 \
-  -Tp24HJ64GP502.gld.05 \
+  --defsym=__MPLAB_DEBUGGER_SIMULATOR=1 \
+  -Tp24HJ64GP502.gld.00 \
   --stack=16 \
   --check-sections \
   --data-init \
@@ -75,23 +71,20 @@ Default Scalar Model: Small
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
 .text                        0x200                0xce           0x135  (309)
-.text                        0x2ce                0x2a            0x3f  (63)
-.init.delay32                0x2f8                0x1c            0x2a  (42)
+.text                        0x2ce               0x102           0x183  (387)
+.init.delay32                0x3d0                0x1c            0x2a  (42)
+.dinit                       0x3ec                 0x8             0xc  (12)
 
-                 Total "program" memory used (bytes):          0x19e  (414) <1%
+                 Total "program" memory used (bytes):          0x2ee  (750) 1%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x2000]
 
 section                    address      alignment gaps    total length  (dec)
 -------                    -------      --------------    -------------------
-reserve_data_0x800           0x800                0x20            0x20  (32)
-reserve_data_0x820           0x820                 0x2             0x2  (2)
-reserve_data_0x822           0x822                 0x2             0x2  (2)
-reserve_data_0x824           0x824                 0x2             0x2  (2)
-reserve_data_0x826           0x826                0x2a            0x2a  (42)
+.nbss                        0x800                   0             0x2  (2)
 
-                 Total "data" memory used (bytes):           0x50  (80) <1%
+                 Total "data" memory used (bytes):            0x2  (2) <1%
 
 
 Dynamic Memory Usage
@@ -99,12 +92,20 @@ Dynamic Memory Usage
 region                     address                      maximum length  (dec)
 ------                     -------                      ---------------------
 heap                             0                                   0  (0)
-stack                        0x850                              0x1fb0  (8112)
+stack                        0x802                              0x1ffe  (8190)
 
-                 Maximum dynamic memory (bytes):         0x1fb0  (8112)
+                 Maximum dynamic memory (bytes):         0x1ffe  (8190)
 
 Info: Project is using a large data memory model when small data memory model is sufficient.
 
+
+External Symbols in Data Memory (by address):
+
+                    0x0800                  _playerPosition
+
+External Symbols in Data Memory (by name):
+
+                    0x0800                  _playerPosition
 
 External Symbols in Program Memory (by address):
 
@@ -113,18 +114,28 @@ External Symbols in Program Memory (by address):
                   0x000252                  __data_init
                   0x000252                  __data_init_standard
                   0x0002c8                  __DefaultInterrupt
-                  0x0002ce                  _main
-                  0x0002f8                  ___delay32
+                  0x0002ce                  _blink
+                  0x0002f6                  _updateDisplay
+                  0x000308                  _movePlayerRight
+                  0x00031c                  _movePlayerLeft
+                  0x000330                  _processInput
+                  0x0003a4                  _main
+                  0x0003d0                  ___delay32
 
 External Symbols in Program Memory (by name):
 
                   0x0002c8                  __DefaultInterrupt
-                  0x0002f8                  ___delay32
+                  0x0003d0                  ___delay32
                   0x000252                  __data_init
                   0x000252                  __data_init_standard
                   0x00023c                  __psv_init
                   0x000200                  __resetPRI
-                  0x0002ce                  _main
+                  0x0002ce                  _blink
+                  0x0003a4                  _main
+                  0x00031c                  _movePlayerLeft
+                  0x000308                  _movePlayerRight
+                  0x000330                  _processInput
+                  0x0002f6                  _updateDisplay
 
 Memory Configuration
 
@@ -151,35 +162,11 @@ FUID3            0xf80016           0x000002
 
 Linker script and memory map
 
-
-reserve_data_0x800
-                    0x0800         0x20
-                    0x0820                  . = 0x20
- *fill*             0x0800         0x2000
-
-reserve_data_0x820
-                    0x0820          0x2
-                    0x0822                  . = 0x2
- *fill*             0x0820          0x200
-
-reserve_data_0x822
-                    0x0822          0x2
-                    0x0824                  . = 0x2
- *fill*             0x0822          0x200
-
-reserve_data_0x824
-                    0x0824          0x2
-                    0x0826                  . = 0x2
- *fill*             0x0824          0x200
-
-reserve_data_0x826
-                    0x0826         0x2a
-                    0x0850                  . = 0x2a
- *fill*             0x0826         0x2a00
 LOAD build/default/debug/newmainXC16.o
                     0x0001                  __MPLAB_BUILD = 0x1
                     0x0001                  __MPLAB_DEBUG = 0x1
                     0x0001                  __DEBUG = 0x1
+                    0x0001                  __MPLAB_DEBUGGER_SIMULATOR = 0x1
 LOAD p24HJ64GP502
 LOAD c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libfx-elf.a
                     0xf80000                  __FBS = 0xf80000
@@ -275,26 +262,26 @@ __FUID3
 .comment
  *(.comment)
 
-.debug_info       0x000000        0x210
+.debug_info       0x000000        0x329
  *(.debug_info)
- .debug_info      0x000000        0x210 build/default/debug/newmainXC16.o
+ .debug_info      0x000000        0x329 build/default/debug/newmainXC16.o
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev     0x000000         0x86
+.debug_abbrev     0x000000         0xd8
  *(.debug_abbrev)
- .debug_abbrev    0x000000         0x86 build/default/debug/newmainXC16.o
+ .debug_abbrev    0x000000         0xd8 build/default/debug/newmainXC16.o
 
-.debug_line       0x000000        0x114
+.debug_line       0x000000        0x138
  *(.debug_line)
- .debug_line      0x000000        0x114 build/default/debug/newmainXC16.o
+ .debug_line      0x000000        0x138 build/default/debug/newmainXC16.o
 
-.debug_frame      0x000000         0x2e
+.debug_frame      0x000000         0xb0
  *(.debug_frame)
- .debug_frame     0x000000         0x2e build/default/debug/newmainXC16.o
+ .debug_frame     0x000000         0xb0 build/default/debug/newmainXC16.o
 
-.debug_str        0x000000          0x9
+.debug_str        0x000000         0x18
  *(.debug_str)
- .debug_str       0x000000          0x9 build/default/debug/newmainXC16.o
+ .debug_str       0x000000         0x18 build/default/debug/newmainXC16.o
 
 .debug_loc
  *(.debug_loc)
@@ -303,10 +290,10 @@ __FUID3
  *(.debug_macinfo)
 
 .debug_pubnames
-                  0x000000         0x1b
+                  0x000000         0x82
  *(.debug_pubnames)
  .debug_pubnames
-                  0x000000         0x1b build/default/debug/newmainXC16.o
+                  0x000000         0x82 build/default/debug/newmainXC16.o
 
 .debug_ranges
  *(.debug_ranges)
@@ -1186,6 +1173,7 @@ LOAD c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-elf.a
 END GROUP
 OUTPUT(dist/default/debug/1d-Game.X.debug.elf elf32-pic30)
 LOAD default_isr
+LOAD data_init
 
 .debug_pubtypes
                   0x000018         0x1f
@@ -1203,10 +1191,22 @@ __c30_signature
  __c30_signature
                   0x000049          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
 
-.text             0x0002ce         0x2a
- .text            0x0002ce         0x2a build/default/debug/newmainXC16.o
-                  0x0002ce                  _main
+.nbss               0x0800          0x2
+ .nbss              0x0800          0x2 build/default/debug/newmainXC16.o
+                    0x0800                  _playerPosition
 
-.init.delay32     0x0002f8         0x1c
- .init.delay32    0x0002f8         0x1c c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
-                  0x0002f8                  ___delay32
+.text             0x0002ce        0x102
+ .text            0x0002ce        0x102 build/default/debug/newmainXC16.o
+                  0x0002ce                  _blink
+                  0x0002f6                  _updateDisplay
+                  0x000308                  _movePlayerRight
+                  0x00031c                  _movePlayerLeft
+                  0x000330                  _processInput
+                  0x0003a4                  _main
+
+.init.delay32     0x0003d0         0x1c
+ .init.delay32    0x0003d0         0x1c c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
+                  0x0003d0                  ___delay32
+
+.dinit            0x0003ec          0x8
+ .dinit           0x0003ec          0x8 data_init
