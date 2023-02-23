@@ -16,42 +16,101 @@
 unsigned int timer1_count = 0;
 unsigned int timer2_count = 0;
 
-unsigned char playerPosition = 0;
+unsigned char playerPosition[] = {0,0};
 unsigned char playerPassThrough = 0xFF;
+unsigned char doorPosition[] = {4,4};
 unsigned char doorPassThrough = 0xFF;
 
-unsigned char mase[8][8] ={
-    {0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0},
-    {0,0,0,0,0,0,0,0},
+unsigned char level = 0;
+
+unsigned char mase[3][8] ={
+{
+    0b00000000,
+    0b00111100,
+    0b00000000,
+    0b01000010,
+    0b01000010,
+    0b00000000,
+    0b00111100,
+    0b00000000,
+},
+{
+    0b00000010,
+    0b01111110,
+    0b01000000,
+    0b01011110,
+    0b01000010,
+    0b01001010,
+    0b01111010,
+    0b00000010,
+},
+{
+    0b00000000,
+    0b01011011,
+    0b01001000,
+    0b01111110,
+    0b00010000,
+    0b11010010,
+    0b01110110,
+    0b00000100,
+},
 };
 
-void blink(unsigned char ledNumber)
-{
-    // turn on the last LED for half a second then turn off
-    LATB &= ~(1<<ledNumber);
-    __delay_ms(500);
-    LATB |= (1<<ledNumber);
-}
-
 void updateDisplay(void){
-    LATB = ~((1<<playerPosition) & playerPassThrough); 
+    unsigned char player = (1<<playerPosition[0]) & playerPassThrough;
+    unsigned char walls = mase[level][playerPosition[1]];
+    unsigned char door = (playerPosition[1] == doorPosition[1]) ? ((1<<doorPosition[0]) & doorPassThrough) : 0;
+    LATB = ~(player | walls | door); 
 }
 
 void movePlayerLeft (void) {
-    if(playerPosition > 0){//unless the player is already on the most right position move him to the right
-        playerPosition--;     
+    
+    if(playerPosition[0] > 0){//unless the player is already on the most right position move him to the right
+        unsigned char nextPosition = ((mase[level][playerPosition[1]]>>(playerPosition[0]-1))&(1<<0));
+        if(nextPosition != 1){
+            playerPosition[0]--;     
+        }
     }
 }
 
 void movePlayerRight (void) {
-    if(playerPosition < 7){//unless the player is already on the most right position move him to the right
-        playerPosition++;
+    if(playerPosition[0] < 7){//unless the player is already on the most right position move him to the right
+        unsigned char nextPosition = ((mase[level][playerPosition[1]]>>(playerPosition[0]+1))&(1<<0));
+        if(nextPosition != 1){
+            playerPosition[0]++;     
+        }
+    }
+}
+
+void movePlayerForward (void) {
+    if(playerPosition[1] > 0){
+        unsigned char nextY = playerPosition[1]-1;
+        unsigned char nextPosition = ((mase[level][nextY]>>playerPosition[0])&(1<<0));
+        if(nextPosition != 1){//if the next cell in the mase is not a wall go there
+            playerPosition[1]--;     
+        }else{// otherwise show that wall for a moment
+            LATB = ~(mase[level][nextY]);
+            __delay_ms(250);
+        }  
+    }else{//if you ran into the end of the mase blink all LEDs
+        LATB = 0;
+        __delay_ms(250);
+    }
+}
+
+void movePlayerBackward (void) {
+    if(playerPosition[1] < 7){//unless the player is already on the most right position move him to the right
+        unsigned char nextY = playerPosition[1]+1;
+        unsigned char nextPosition = ((mase[level][nextY]>>playerPosition[0])&(1<<0)); 
+        if(nextPosition != 1){//if the next cell in the mase is not a wall go there
+            playerPosition[1]++;    
+        }else{// otherwise show that wall for a moment
+            LATB = ~(mase[level][nextY]);
+            __delay_ms(250);
+        }  
+    }else{//if you ran into the end of the mase blink all LEDs
+        LATB = 0;
+        __delay_ms(250);
     }
 }
 
@@ -69,17 +128,66 @@ void processInput(unsigned char inputNumber, unsigned char comandNumber)
                 case 0:
                     movePlayerRight();
                     break;
+                case 1:
+                    movePlayerBackward();
+                    break;
+                case 2:
+                    movePlayerForward();
+                    break;
                 case 3:
                     movePlayerLeft();
                     break;
-                default:
-                    blink(0);
-                    break;
             }
             
-            __delay_ms(200);
+            __delay_ms(300);
             debounceTimeout = 0;
         }
+    }
+}
+
+void victoryAnimation(void) {
+    int speed = 200;  
+    LATB = ~(0b00011000);
+    __delay_ms(speed);
+    LATB = ~(0b00100100);
+    __delay_ms(speed);
+    for(char i=0;i<5;i++){
+        LATB = ~(0b01011010);
+        __delay_ms(speed);
+        LATB = ~(0b10100101);
+        __delay_ms(speed);
+    }
+    LATB = ~(0b01000010);
+    __delay_ms(speed);
+    LATB = ~(0b10000001);
+    __delay_ms(speed);
+    LATB = ~(0b00000000);
+    __delay_ms(speed*3);
+}
+
+void victoryCheck(void) {
+    if((playerPosition[0] == doorPosition[0]) && (playerPosition[1] == doorPosition[1])){
+        victoryAnimation();
+        playerPosition[0] = 0;
+        playerPosition[1] = 0;
+        switch(level){
+            case 0:
+                doorPosition[0] = 2;
+                doorPosition[1] = 0;
+                level = 1;
+                break;
+            case 1:
+                doorPosition[0] = 7;
+                doorPosition[1] = 7;
+                level = 2;
+                break;
+            case 2:
+                doorPosition[0] = 4;
+                doorPosition[1] = 4;
+                level = 0;
+                break;
+        }
+        
     }
 }
 
@@ -149,7 +257,7 @@ int main(void)
                 timer2_count = 0;   // Reset Timer 2 count
             }
         }
-        
+        victoryCheck();
         updateDisplay();
     }
     return 0;

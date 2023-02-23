@@ -55,6 +55,12 @@ c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(crt_s
                               (__crt_start_mode_normal)
 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
                               build/default/production/newmainXC16.o (___delay32)
+c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(divmoddi3.XX_o)
+                              build/default/production/newmainXC16.o (___udivdi3)
+c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(muldi3.XX_o)
+                              build/default/production/newmainXC16.o (___muldi3)
+c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(umuldi3.XX_o)
+                              c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(muldi3.XX_o) (___umuldi3)
 
 
 xc16-ld 2.00 (B)
@@ -67,12 +73,12 @@ Default Scalar Model: Small
 
 section                    address   length (PC units)   length (bytes) (dec)
 -------                    -------   -----------------   --------------------
-.text                        0x200                0xce           0x135  (309)
-.text                        0x2ce               0x16e           0x225  (549)
-.init.delay32                0x43c                0x1c            0x2a  (42)
-.dinit                       0x458                0x16            0x21  (33)
+.text                        0x200               0x37a           0x537  (1335)
+.text                        0x57a               0x44e           0x675  (1653)
+.dinit                       0x9c8                0x2e            0x45  (69)
+.init.delay32                0x9f6                0x1c            0x2a  (42)
 
-                 Total "program" memory used (bytes):          0x3a5  (933) 1%
+                 Total "program" memory used (bytes):          0xc1b  (3099) 4%
 
 
 "data" Memory  [Origin = 0x800, Length = 0x2000]
@@ -81,9 +87,10 @@ section                    address      alignment gaps    total length  (dec)
 -------                    -------      --------------    -------------------
 .nbss                        0x800                   0             0x6  (6)
 .ndata                       0x806                   0             0x2  (2)
-.bss                         0x808                   0            0x40  (64)
+.data                        0x808                   0            0x1a  (26)
+.bss                         0x822                   0             0x2  (2)
 
-                 Total "data" memory used (bytes):           0x48  (72) <1%
+                 Total "data" memory used (bytes):           0x24  (36) <1%
 
 
 Dynamic Memory Usage
@@ -91,9 +98,9 @@ Dynamic Memory Usage
 region                     address                      maximum length  (dec)
 ------                     -------                      ---------------------
 heap                             0                                   0  (0)
-stack                        0x848                              0x1fb8  (8120)
+stack                        0x824                              0x1fdc  (8156)
 
-                 Maximum dynamic memory (bytes):         0x1fb8  (8120)
+                 Maximum dynamic memory (bytes):         0x1fdc  (8156)
 
 Info: Project is using a large data memory model when small data memory model is sufficient.
 
@@ -102,17 +109,21 @@ External Symbols in Data Memory (by address):
 
                     0x0800                  _timer1_count
                     0x0802                  _timer2_count
-                    0x0804                  _playerPosition
+                    0x0804                  _level
                     0x0806                  _playerPassThrough
                     0x0807                  _doorPassThrough
-                    0x0808                  _mase
+                    0x0808                  _doorPosition
+                    0x080a                  _mase
+                    0x0822                  _playerPosition
 
 External Symbols in Data Memory (by name):
 
                     0x0807                  _doorPassThrough
-                    0x0808                  _mase
+                    0x0808                  _doorPosition
+                    0x0804                  _level
+                    0x080a                  _mase
                     0x0806                  _playerPassThrough
-                    0x0804                  _playerPosition
+                    0x0822                  _playerPosition
                     0x0800                  _timer1_count
                     0x0802                  _timer2_count
 
@@ -120,31 +131,51 @@ External Symbols in Program Memory (by address):
 
                   0x000200                  __resetPRI
                   0x00023c                  __psv_init
-                  0x000252                  __data_init
                   0x000252                  __data_init_standard
+                  0x000252                  __data_init
                   0x0002c8                  __DefaultInterrupt
-                  0x0002ce                  _blink
-                  0x0002f6                  _updateDisplay
-                  0x00030e                  _movePlayerLeft
-                  0x000320                  _movePlayerRight
-                  0x000332                  _processInput
-                  0x0003a6                  _main
-                  0x00043c                  ___delay32
+                  0x00031a                  ___udivmoddi3
+                  0x000412                  ___udivdi3
+                  0x000420                  ___umoddi3
+                  0x000428                  ___divdi3
+                  0x000488                  ___moddi3
+                  0x0004e4                  ___muldi3
+                  0x000536                  ___umuldi3
+                  0x00057a                  _updateDisplay
+                  0x0005de                  _movePlayerLeft
+                  0x000620                  _movePlayerRight
+                  0x000662                  _movePlayerForward
+                  0x0006d2                  _movePlayerBackward
+                  0x000742                  _processInput
+                  0x0007c6                  _victoryAnimation
+                  0x0008c0                  _victoryCheck
+                  0x000930                  _main
+                  0x0009f6                  ___delay32
 
 External Symbols in Program Memory (by name):
 
                   0x0002c8                  __DefaultInterrupt
-                  0x00043c                  ___delay32
+                  0x0009f6                  ___delay32
+                  0x000428                  ___divdi3
+                  0x000488                  ___moddi3
+                  0x0004e4                  ___muldi3
+                  0x000412                  ___udivdi3
+                  0x00031a                  ___udivmoddi3
+                  0x000420                  ___umoddi3
+                  0x000536                  ___umuldi3
                   0x000252                  __data_init
                   0x000252                  __data_init_standard
                   0x00023c                  __psv_init
                   0x000200                  __resetPRI
-                  0x0002ce                  _blink
-                  0x0003a6                  _main
-                  0x00030e                  _movePlayerLeft
-                  0x000320                  _movePlayerRight
-                  0x000332                  _processInput
-                  0x0002f6                  _updateDisplay
+                  0x000930                  _main
+                  0x0006d2                  _movePlayerBackward
+                  0x000662                  _movePlayerForward
+                  0x0005de                  _movePlayerLeft
+                  0x000620                  _movePlayerRight
+                  0x000742                  _processInput
+                  0x00057a                  _updateDisplay
+                  0x0007c6                  _victoryAnimation
+                  0x0008c0                  _victoryCheck
 
 Memory Configuration
 
@@ -203,7 +234,7 @@ LOAD c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libfx-elf.a
                   0x000002          0x2 SHORT 0x0 ((ABSOLUTE (__reset) >> 0x10) & 0x7f)
                   0x000003          0x2 SHORT 0x0
 
-.text             0x000200         0xce
+.text             0x000200        0x37a
  *(.init)
  .init            0x000200         0x4c c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o)
                   0x000200                  __resetPRI
@@ -225,6 +256,30 @@ LOAD c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libfx-elf.a
                   0x0002cc          0x2 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(crt_start_mode_normal.Meo)
                   0x0002cc                  __crt_start_mode
                   0x0002cc                  __crt_start_mode_normal
+ .libm.__PplusBdi
+                  0x0002ce         0x26 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(divmoddi3.XX_o)
+ .libm.__PminusBdi
+                  0x0002f4         0x26 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(divmoddi3.XX_o)
+ .libm.__udivmoddi3
+                  0x00031a         0xf8 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(divmoddi3.XX_o)
+                  0x00031a                  ___udivmoddi3
+ .libm.__udivdi3
+                  0x000412          0xe c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(divmoddi3.XX_o)
+                  0x000412                  ___udivdi3
+ .libm.__umoddi3
+                  0x000420          0x8 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(divmoddi3.XX_o)
+                  0x000420                  ___umoddi3
+ .libm.__divdi3
+                  0x000428         0x60 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(divmoddi3.XX_o)
+                  0x000428                  ___divdi3
+ .libm.__moddi3
+                  0x000488         0x5c c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(divmoddi3.XX_o)
+                  0x000488                  ___moddi3
+ .libm.__muldi3
+                  0x0004e4         0x52 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(muldi3.XX_o)
+                  0x0004e4                  ___muldi3
+ .libm.umuldi3    0x000536         0x44 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(umuldi3.XX_o)
+                  0x000536                  ___umuldi3
 
 usercode
  *(usercode)
@@ -268,26 +323,29 @@ __FUID3
 .comment
  *(.comment)
 
-.debug_info       0x000000        0x7d6
+.debug_info       0x000000        0xa10
  *(.debug_info)
- .debug_info      0x000000        0x7d6 build/default/production/newmainXC16.o
+ .debug_info      0x000000        0x983 build/default/production/newmainXC16.o
+ .debug_info      0x000983         0x8d c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(umuldi3.XX_o)
  *(.gnu.linkonce.wi.*)
 
-.debug_abbrev     0x000000        0x17a
+.debug_abbrev     0x000000        0x1b7
  *(.debug_abbrev)
- .debug_abbrev    0x000000        0x17a build/default/production/newmainXC16.o
+ .debug_abbrev    0x000000        0x1a3 build/default/production/newmainXC16.o
+ .debug_abbrev    0x0001a3         0x14 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(umuldi3.XX_o)
 
-.debug_line       0x000000        0x14f
+.debug_line       0x000000        0x1fc
  *(.debug_line)
- .debug_line      0x000000        0x14f build/default/production/newmainXC16.o
+ .debug_line      0x000000        0x1a5 build/default/production/newmainXC16.o
+ .debug_line      0x0001a5         0x57 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(umuldi3.XX_o)
 
-.debug_frame      0x000000         0xb0
+.debug_frame      0x000000         0xfe
  *(.debug_frame)
- .debug_frame     0x000000         0xb0 build/default/production/newmainXC16.o
+ .debug_frame     0x000000         0xfe build/default/production/newmainXC16.o
 
-.debug_str        0x000000         0x71
+.debug_str        0x000000         0x8b
  *(.debug_str)
- .debug_str       0x000000         0x71 build/default/production/newmainXC16.o
+ .debug_str       0x000000         0x8b build/default/production/newmainXC16.o
 
 .debug_loc
  *(.debug_loc)
@@ -296,18 +354,20 @@ __FUID3
  *(.debug_macinfo)
 
 .debug_pubnames
-                  0x000000         0xd7
+                  0x000000        0x13b
  *(.debug_pubnames)
  .debug_pubnames
-                  0x000000         0xd7 build/default/production/newmainXC16.o
+                  0x000000        0x13b build/default/production/newmainXC16.o
 
 .debug_ranges
  *(.debug_ranges)
 
-.debug_aranges    0x000000         0x18
+.debug_aranges    0x000000         0x30
  *(.debug_aranges)
  .debug_aranges
                   0x000000         0x18 build/default/production/newmainXC16.o
+ .debug_aranges
+                  0x000018         0x18 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(umuldi3.XX_o)
                     0x0000                  WREG0 = 0x0
                     0x0000                  _WREG0 = 0x0
                     0x0002                  WREG1 = 0x2
@@ -1182,48 +1242,62 @@ LOAD default_isr
 LOAD data_init
 
 .debug_pubtypes
-                  0x000018         0x7a
+                  0x000030         0x7a
  .debug_pubtypes
-                  0x000018         0x7a build/default/production/newmainXC16.o
+                  0x000030         0x7a build/default/production/newmainXC16.o
 
 __c30_signature
-                  0x000092         0x18
+                  0x0000aa         0x2a
  __c30_signature
-                  0x000092          0x6 build/default/production/newmainXC16.o
+                  0x0000aa          0x6 build/default/production/newmainXC16.o
  __c30_signature
-                  0x000098          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o)
+                  0x0000b0          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(crt0_standard.o)
  __c30_signature
-                  0x00009e          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(data_init_standard.o)
+                  0x0000b6          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(data_init_standard.o)
  __c30_signature
-                  0x0000a4          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
+                  0x0000bc          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
+ __c30_signature
+                  0x0000c2          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(divmoddi3.XX_o)
+ __c30_signature
+                  0x0000c8          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(muldi3.XX_o)
+ __c30_signature
+                  0x0000ce          0x6 c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(umuldi3.XX_o)
 
 .nbss               0x0800          0x6
  .nbss              0x0800          0x6 build/default/production/newmainXC16.o
                     0x0800                  _timer1_count
                     0x0802                  _timer2_count
-                    0x0804                  _playerPosition
+                    0x0804                  _level
 
 .ndata              0x0806          0x2
  .ndata             0x0806          0x2 build/default/production/newmainXC16.o
                     0x0806                  _playerPassThrough
                     0x0807                  _doorPassThrough
 
-.bss                0x0808         0x40
- .bss               0x0808         0x40 build/default/production/newmainXC16.o
-                    0x0808                  _mase
+.data               0x0808         0x1a
+ .data              0x0808         0x1a build/default/production/newmainXC16.o
+                    0x0808                  _doorPosition
+                    0x080a                  _mase
 
-.text             0x0002ce        0x16e
- .text            0x0002ce        0x16e build/default/production/newmainXC16.o
-                  0x0002ce                  _blink
-                  0x0002f6                  _updateDisplay
-                  0x00030e                  _movePlayerLeft
-                  0x000320                  _movePlayerRight
-                  0x000332                  _processInput
-                  0x0003a6                  _main
+.bss                0x0822          0x2
+ .bss               0x0822          0x2 build/default/production/newmainXC16.o
+                    0x0822                  _playerPosition
 
-.init.delay32     0x00043c         0x1c
- .init.delay32    0x00043c         0x1c c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
-                  0x00043c                  ___delay32
+.text             0x00057a        0x44e
+ .text            0x00057a        0x44e build/default/production/newmainXC16.o
+                  0x00057a                  _updateDisplay
+                  0x0005de                  _movePlayerLeft
+                  0x000620                  _movePlayerRight
+                  0x000662                  _movePlayerForward
+                  0x0006d2                  _movePlayerBackward
+                  0x000742                  _processInput
+                  0x0007c6                  _victoryAnimation
+                  0x0008c0                  _victoryCheck
+                  0x000930                  _main
 
-.dinit            0x000458         0x16
- .dinit           0x000458         0x16 data_init
+.dinit            0x0009c8         0x2e
+ .dinit           0x0009c8         0x2e data_init
+
+.init.delay32     0x0009f6         0x1c
+ .init.delay32    0x0009f6         0x1c c:/program files/microchip/xc16/v2.00/bin/bin/../../lib\libc99-pic30-elf.a(delay32.Meo)
+                  0x0009f6                  ___delay32
